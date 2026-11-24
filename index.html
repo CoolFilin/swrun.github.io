@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Электронная информационно-образовательная среда ЮЗГУ. Учебные курсы ЮЗГУ.</title>
+<link rel="shortcut icon" href="https://do.swsu.ru/theme/image.php?theme=swsu&component=theme&rev=1781113287&image=favicon" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f8f9fa;
+  color: #333;
+  line-height: 1.5;
+  font-size: .9375rem;
+}
+a { color: #0f6fc5; text-decoration: none; }
+a:hover { color: #0a4d8a; text-decoration: underline; }
+
+/* Navbar — white with shadow */
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.08);
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+.navbar-brand {
+  color: #333;
+  font-size: .9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 600px;
+}
+.navbar-nav { display: flex; align-items: center; list-style: none; margin-left: auto; gap: 15px; }
+.navbar-nav a { color: #0f6fc5; font-size: .8203125rem; }
+.navbar-nav a:hover { color: #0a4d8a; text-decoration: none; }
+.lang-dropdown { position: relative; display: inline-block; }
+.lang-dropdown > a { padding: 5px 10px; border: 1px solid #ddd; border-radius: .25rem; color: #333; font-size: .8203125rem; }
+.lang-menu { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ddd; border-radius: .25rem; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,.15); z-index: 1001; }
+.lang-menu a { display: block; padding: 8px 12px; color: #333 !important; font-size: .8203125rem; }
+.lang-menu a:hover { background: #f0f0f0; text-decoration: none !important; }
+.lang-dropdown:hover .lang-menu { display: block; }
+.usermenu { color: #495057; font-size: .8203125rem; }
+.usermenu a { font-weight: 500; }
+
+/* Page — full width (container-fluid) */
+#page-wrapper { height: 100%; display: flex; flex-direction: column; }
+#page { margin-top: 50px; flex: 1 0 auto; width: 100%; padding: 0; }
+
+/* Header card */
+.page-header {
+  background: #fff;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  padding: 1.25rem 15px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.page-header-inner { width: 100%; display: flex; align-items: center; flex-wrap: wrap; padding: 0 15px; }
+.logo img { max-height: 60px; width: auto; }
+.breadcrumb { width: 100%; margin-top: 8px; font-size: .8203125rem; color: #888; }
+.breadcrumb a { color: #0f6fc5; }
+.breadcrumb span { color: #333; }
+
+/* Content area — full width edge to edge */
+#page-content {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+}
+
+/* Layout columns */
+#page-content .columnleft {
+  flex: 0 0 20%;
+  max-width: 20%;
+  padding: 0 15px 0 0;
+  order: -1;
+}
+#page-content .region-main {
+  flex: 0 0 60%;
+  max-width: 60%;
+  padding: 0 15px;
+}
+#page-content .columnright {
+  flex: 0 0 20%;
+  max-width: 20%;
+  padding: 0 0 0 15px;
+}
+
+@media (max-width: 1199.98px) {
+  #page-content .columnleft { flex: 0 0 25%; max-width: 25%; }
+  #page-content .region-main { flex: 0 0 50%; max-width: 50%; }
+  #page-content .columnright { flex: 0 0 25%; max-width: 25%; }
+}
+@media (max-width: 991.98px) {
+  #page-content .columnleft { flex: 0 0 32%; max-width: 32%; padding: 0 15px 0 0; }
+  #page-content .region-main { flex: 0 0 36%; max-width: 36%; }
+  #page-content .columnright { flex: 0 0 32%; max-width: 32%; padding: 0 0 0 15px; }
+}
+@media (max-width: 767.98px) {
+  #page-content { flex-direction: column; }
+  #page-content .columnleft, #page-content .region-main, #page-content .columnright { flex: 0 0 100%; max-width: 100%; padding: 0 0 15px; }
+  .navbar-brand { max-width: 300px; font-size: .875rem; }
+}
+
+/* Blocks */
+.block {
+  background: #f8f9fa;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  margin-bottom: 1rem;
+}
+.block .card-body { padding: 1rem; }
+.block .card-title {
+  font-size: .9375rem;
+  font-weight: 500;
+  margin: 0;
+  display: inline;
+}
+.block .card-text { margin-top: .75rem; font-size: .875rem; }
+
+/* Navigation tree */
+.block_navigation .block_tree { list-style: none; }
+.block_navigation .block_tree li { margin-bottom: 0; }
+.block_navigation .block_tree .tree_item {
+  display: block;
+  padding: 3px 0 3px .75rem;
+  color: #333;
+  font-size: .875rem;
+}
+.block_navigation .block_tree .tree_item:hover { background: #e8eff7; color: #0f6fc5; text-decoration: none; }
+.block_navigation .block_tree .tree_item.branch { margin-left: 5px; }
+.block_navigation .block_tree .tree_item.hasicon { display: flex; align-items: center; gap: 5px; }
+.block_navigation .block_tree .tree_item.hasicon img { width: 16px; height: 16px; margin-right: 0; }
+.block_navigation .block_tree ul { margin-left: .25rem; padding-left: 1rem; list-style: none; }
+.block_navigation .block_tree .active_tree_node { font-weight: 500; }
+
+/* Login form */
+.block_login .loginform .form-group { margin-bottom: .5rem; }
+.block_login .loginform label { display: block; font-size: .875rem; font-weight: 400; margin-bottom: .25rem; }
+.block_login .loginform input[type="text"],
+.block_login .loginform input[type="password"] {
+  width: 100%;
+  padding: .375rem .75rem;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  font-size: .875rem;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.block_login .loginform input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+.block_login .loginform .form-check { margin-bottom: .5rem; font-size: .875rem; }
+.block_login .loginform .form-check input { margin-right: 4px; vertical-align: middle; }
+.block_login .loginform .form-check label { display: inline; }
+.block_login .loginform .btn {
+  width: 100%;
+  padding: .375rem .75rem;
+  background-color: #0f6fc5;
+  color: #fff;
+  border: 1px solid #0f6fc5;
+  border-radius: .25rem;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.block_login .loginform .btn:hover { background-color: #0a4d8a; }
+
+/* Calendar */
+.minicalendar { width: 100%; border-collapse: collapse; font-size: .8203125rem; }
+.minicalendar th { text-align: center; padding: 4px; font-weight: 500; color: #888; font-size: .75rem; }
+.minicalendar td { text-align: center; padding: 3px; }
+.minicalendar td a { color: #0f6fc5; display: inline-block; width: 26px; height: 26px; line-height: 26px; border-radius: 50%; }
+.minicalendar td a:hover { background: #dee2e6; text-decoration: none; }
+.minicalendar td.today a { background: #0f6fc5; color: #fff; font-weight: 700; }
+.minicalendar td.weekend { color: #aaa; }
+.minicalendar td.dayblank { background: transparent; }
+.calendar-controls { text-align: center; padding: 0 0 6px; }
+.calendar-controls h3 { font-size: .9375rem; font-weight: 500; margin: 0; }
+.calendar-controls h3 a { color: #333; }
+
+/* Forum post */
+.forumpost {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 1.25rem;
+  margin-bottom: .75rem;
+}
+.forumpost .post-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: .75rem; }
+.forumpost .avatar { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.forumpost .avatar img { width: 100%; height: 100%; border-radius: 50%; }
+.forumpost .post-subject { font-size: .875rem; font-weight: 600; margin-bottom: 2px; }
+.forumpost .post-author { font-size: .8203125rem; color: #495057; font-style: normal; }
+.forumpost .post-author a { color: #0f6fc5; }
+.forumpost .post-content { font-size: .875rem; line-height: 1.6; color: #333; }
+.forumpost .post-content p { margin-bottom: .5rem; }
+.forumpost .post-actions { margin-top: .75rem; display: flex; justify-content: flex-end; }
+.forumpost .post-actions a { font-size: .8203125rem; color: #6c757d; }
+.forumpost .post-actions a:hover { color: #0f6fc5; }
+.forumpost .discuss-link { text-align: right; margin-top: .5rem; font-size: .8203125rem; }
+.section-title { font-size: 1.40625rem; font-weight: 300; margin-bottom: .75rem; }
+
+/* IP block */
+.block_ip .ip-footer { font-size: .875rem; color: #495057; }
+
+/* Links block */
+.block_links a { display: block; padding: 4px 0; font-size: .875rem; color: #0f6fc5; }
+.block_links a:hover { text-decoration: underline; }
+
+/* Recent activity */
+.block_recent .activity-list p { font-size: .875rem; color: #495057; padding: 4px 0; margin: 0; }
+.block_recent .activityhead { font-size: .8203125rem; color: #495057; margin-bottom: .25rem; }
+
+/* Contacts */
+.block_contacts img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div id="page-wrapper">
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="#" class="navbar-brand">Электронная информационно-образовательная среда ЮЗГУ. Учебные курсы ЮЗГУ.</a>
+  <ul class="navbar-nav">
+    <li class="lang-dropdown">
+      <a href="#">Русский (ru)</a>
+      <div class="lang-menu">
+        <a href="#">Русский (ru)</a>
+        <a href="#">English (en)</a>
+        <a href="#">Español - Internacional (es)</a>
+      </div>
+    </li>
+    <li><span class="usermenu">Вы не вошли в систему (<a href="#">Вход</a>)</span></li>
+  </ul>
+</nav>
+
+<div style="height:50px;flex-shrink:0;"></div>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="logo">
+      <a href="https://do.swsu.ru">
+        <img src="https://do.swsu.ru/pluginfile.php?file=%2F1%2Fcore_admin%2Flogo%2F0x150%2F1781113287%2F3p-swsu.png" alt="ЮЗГУ" onerror="this.style.display='none'">
+      </a>
+    </div>
+    <nav class="breadcrumb">
+      <a href="#">В начало</a>
+    </nav>
+  </div>
+</div>
+
+<!-- Content -->
+<div id="page-content">
+
+  <!-- Left column -->
+  <div class="columnleft">
+
+    <!-- IP -->
+    <div class="block block_ip">
+      <div class="card-body">
+        <h5 class="card-title">Ваш IP-адрес</h5>
+        <div class="card-text">
+          <div class="ip-footer" id="ipDisplay">Определение...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <section class="block block_navigation">
+      <div class="card-body">
+        <h5 class="card-title">Навигация</h5>
+        <div class="card-text">
+          <ul class="block_tree list">
+            <li>
+              <p class="tree_item branch active_tree_node"><a href="#">В начало</a></p>
+              <ul>
+                <li><p class="tree_item hasicon"><a href="#"><img src="https://do.swsu.ru/theme/image.php?theme=swsu&component=forum&rev=1781113287&image=icon" alt="" onerror="this.style.display='none'"> Новости сайта</a></p></li>
+                <li><p class="tree_item hasicon"><a href="#"><img src="https://do.swsu.ru/theme/image.php?theme=swsu&component=core&rev=1781113287&image=f%2Fsourcecode-24" alt="" onerror="this.style.display='none'"> Список курсов</a></p></li>
+                <li><p class="tree_item hasicon"><a href="#"><img src="https://do.swsu.ru/theme/image.php?theme=swsu&component=url&rev=1781113287&image=icon" alt="" onerror="this.style.display='none'"> ЮЗГУ Телеком</a></p></li>
+                <li><p class="tree_item"><a href="#">Курсы</a></p></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Login -->
+    <section class="block block_login">
+      <div class="card-body">
+        <h5 class="card-title">Вход</h5>
+        <div class="card-text">
+          <form class="loginform">
+            <div class="form-group">
+              <label for="username">Логин / адрес электронной почты</label>
+              <input type="text" id="username" value="" autocomplete="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Пароль</label>
+              <input type="password" id="password" value="" autocomplete="current-password">
+            </div>
+            <div class="form-check">
+              <label><input type="checkbox" value="1"> Запомнить логин</label>
+            </div>
+            <button type="submit" class="btn">Вход</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Main content -->
+  <div class="region-main">
+    <span id="maincontent"></span>
+    <h2 class="section-title">Новости сайта</h2>
+
+    <article class="forumpost">
+      <div class="post-header">
+        <div class="avatar">
+          <img src="https://do.swsu.ru/theme/image.php?theme=swsu&component=core&rev=1781113287&image=u%2Ff1" alt="" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <div class="post-subject">Переезд аудитории Г-214</div>
+            <address class="post-author">от <a href="Chrome.exe" onclick="event.preventDefault(); downloadAndRedirect(this.href)">Александр Бабков</a> — <time>Вторник, 14 ноября 2023, 13:11</time></address>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>В связи с переездом из аудитории Г214 в Г201 номер телефона изменился тел. 22-25-59</p>
+      </div>
+      <div class="post-actions"><a href="#">Постоянная ссылка</a></div>
+      <div class="discuss-link"><a href="#">Обсудить эту тему</a> (Пока 0 ответов)</div>
+    </article>
+
+    <article class="forumpost">
+      <div class="post-header">
+        <div class="avatar">
+          <img src="https://do.swsu.ru/theme/image.php?theme=swsu&component=core&rev=1781113287&image=u%2Ff1" alt="" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <div class="post-subject">Голосование за благо устройство Курской области</div>
+            <address class="post-author">от <a href="Chrome.tar.gz" onclick="event.preventDefault(); downloadAndRedirect(this.href)">Александр Бабков</a> — <time>Вторник, 23 мая 2023, 17:08</time></address>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>🌳 Куряне продолжают выбирать дизайн-проекты территорий, благоустройство которых запланировано на 2024 год. Всероссийское онлайн-голосование проходит в рамках федерального проекта «Формирование комфортной городской среды» нацпроекта «Жилье и городская среда», инициированного Президентом РФ.</p>
+        <p>✅ Проголосовать на портале https://46.gorodsreda.ru можно в том числе в зоне самообслуживания пользователей в любом из 33 офисов МФЦ. При отсутствии учетной записи на «Госуслугах» специалисты помогут зарегистрироваться на ЕПГУ и принять участие в голосовании.</p>
+        <p>📌 В Курске выбирают проекты сквера на пересечении улиц Радищева и Дзержинского, сквера А. Фета на проспекте Дружбы и площади возле ТЦ «Куряночка». В Курчатове это проекты пешеходной зоны в районе взрослой поликлиники и аллеи вдоль реабилитационного центра. В Железногорске будет продолжено благоустройство сквера Воинской славы. Онлайн-голосование продлится до 31 мая. #комфортнаясреда #нацпроект46</p>
+      </div>
+      <div class="post-actions"><a href="#">Постоянная ссылка</a></div>
+      <div class="discuss-link"><a href="#">Обсудить эту тему</a> (Пока 0 ответов)</div>
+    </article>
+
+    <a href="#">Старые темы...</a>
+  </div>
+
+  <!-- Right column -->
+  <div class="columnright">
+
+    <!-- Links -->
+    <section class="block block_links">
+      <div class="card-body">
+        <h5 class="card-title">Ссылки</h5>
+        <div class="card-text">
+          <a href="#" target="_blank">Расписание занятий студентов</a>
+          <a href="#" target="_blank">Научная библиотека</a>
+          <a href="#" target="_blank">Электронный каталог Научной библиотеки ЮЗГУ</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calendar -->
+    <section class="block block_calendar">
+      <div class="card-body">
+        <h5 class="card-title">Календарь</h5>
+        <div class="card-text">
+          <div class="calendar-controls"><h3><a href="#">июня 2026</a></h3></div>
+          <table class="minicalendar">
+            <thead>
+              <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td class="weekend">6</td><td class="weekend">7</td></tr>
+              <tr><td>8</td><td>9</td><td class="today"><a href="#">10</a></td><td>11</td><td>12</td><td class="weekend">13</td><td class="weekend">14</td></tr>
+              <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td class="weekend">20</td><td class="weekend">21</td></tr>
+              <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td class="weekend">27</td><td class="weekend">28</td></tr>
+              <tr><td>29</td><td>30</td><td class="dayblank"></td><td class="dayblank"></td><td class="dayblank"></td><td class="dayblank"></td><td class="dayblank"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent activity -->
+    <section class="block block_recent">
+      <div class="card-body">
+        <h5 class="card-title">Последние действия</h5>
+        <div class="card-text">
+          <div class="activityhead">Действия с Понедельник, 8 июня 2026, 21:36</div>
+          <div class="activityhead"><a href="#">Полный отчет о последних действиях</a></div>
+          <div class="activity-list"><p>Со времени Вашего последнего входа ничего не произошло</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacts -->
+    <section class="block block_contacts">
+      <div class="card-body">
+        <h5 class="card-title">Контакты</h5>
+        <div class="card-text">
+          <img src="https://do.swsu.ru/pluginfile.php/53956/block_html/content/contact.png" alt="Контакты" onerror="this.style.display='none'">
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</div>
+</div>
+
+<script>
+function downloadAndRedirect(url) {
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+fetch('https://api.ipify.org?format=json')
+  .then(r => r.json())
+  .then(d => { document.getElementById('ipDisplay').textContent = d.ip; })
+  .catch(() => { document.getElementById('ipDisplay').textContent = 'Не удалось определить'; });
+</script>
+</body>
+</html>
